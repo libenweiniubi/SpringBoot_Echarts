@@ -1,0 +1,79 @@
+use aori;
+        desc userbehavior;
+        select * from userbehavior limit 5;
+
+        --更改字段名
+
+        alter table userbehavior change f1 user_id int;
+        alter table userbehavior change f2 item_id int;
+        alter table userbehavior change f3 category_id int;
+        alter table userbehavior change f4 behavior_type varchar(5);
+        alter table userbehavior change f5 timestamps int;
+
+
+        --检查空值
+
+        select * from userbehavior where user_id is null;
+        select * from userbehavior where item_id is null;
+        select * from userbehavior where category_id is null;
+        select * from userbehavior where behavior_type is null;
+        select * from userbehavior where timestamps is null;
+
+        --检查重复值
+        select user_id,item_id,timestamps from userbehavior
+        group by user_id,item_id,timestamps
+        having count(*) > 1;
+
+        --去重
+
+        -设置主键
+
+        alter table userbehavior add id int first;
+        alter table userbehavior modify id int primary key auto_increment;
+        select * from userbehavior limit 5;
+
+        -去除重复值
+
+        delete userbehavior from
+        userbehavior,
+        (
+        select user_id,item_id,timestamps,min(id) id from userbehavior
+        group by user_id,item_id,timestamps
+        having count(*) > 1
+        ) t2
+        where userbehavior.user_id = t2.user_id
+        and userbehavior.item_id = t2.item_id
+        and userbehavior.timestamps  = t2.timestamps
+        and userbehavior.id > t2.id
+
+        --新增日期
+        - datetime
+
+        alter table userbehavior add datetimes TIMESTAMP(0);
+        update userbehavior set datetimes=FROM_UNIXTIME(timestamps);
+        select * from userbehavior limit 5;
+
+        -time
+        alter table userbehavior add dates char(10);
+        alter table userbehavior add times char(8);
+        alter table userbehavior add hours char(2);
+
+        update userbehavior set dates=substring(datetimes,1,10);
+        update userbehavior set times=substring(datetimes,12,8);
+        update userbehavior set hours=substring(datetimes,12,2);
+        select * from userbehavior limit 5;
+
+        -- 去异常
+        select max(datetimes),min(datetimes) from userbehavior;
+
+        delete from userbehavior
+        where datetimes < '2017-11-25 00:00:00'
+        or datetimes > '2017-12-03 23:59:59';
+
+
+        --数据概览
+        desc userbehavior;
+        select * from userbehavior limit 5;
+        select count(1) from userbehavior; # 999530条记录
+
+

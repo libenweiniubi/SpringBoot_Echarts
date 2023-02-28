@@ -1,0 +1,14 @@
+-- 跳失率
+
+        -- 跳失用户
+
+        select count(*)
+        from
+        (
+        select user_id from userbehavior
+        group by user_id
+        having count(behavior_type)=1
+        ) a;
+
+
+        select sum(pv) from pv_uv_puv;

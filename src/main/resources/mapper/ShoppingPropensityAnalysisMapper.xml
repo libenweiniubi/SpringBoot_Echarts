@@ -1,0 +1,33 @@
+-- 改名表
+
+        create table change_name(
+        path_type char(4),
+        description varchar(40));
+
+
+        insert into change_name
+        values('0001','购买'),
+        ('1001','浏览购买'),
+        ('0011','加购购买'),
+        ('1011','浏览加购购买'),
+        ('0101','收藏购买'),
+        ('1101','浏览收藏购买'),
+        ('0111','收藏加购购买'),
+        ('1111','浏览收藏加购购买');
+
+        select * from change_name;
+
+        create table path_result
+        (description varchar(40)
+        ,path_type_num int);
+
+
+
+        insert into path_result
+        select description,
+        path_type_num
+        from path_count
+        join change_name
+        on path_count.path_type = change_name.path_type;
+
+        select * from path_result;

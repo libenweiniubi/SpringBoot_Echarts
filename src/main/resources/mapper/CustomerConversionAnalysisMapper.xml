@@ -1,0 +1,25 @@
+
+-- 统计各类行为用户数
+
+        select behavior_type
+        ,count(DISTINCT user_id) user_num
+        from userbehavior
+        group by behavior_type
+        order by behavior_type desc
+
+
+        create table behavior_user_num(
+        behavior_type varchar(5),
+        user_num int
+        );
+
+
+        insert into behavior_user_num
+        select behavior_type
+        ,count(DISTINCT user_id) user_num
+        from userbehavior
+        group by behavior_type
+        order by behavior_type desc;
+
+
+        select * from behavior_user_num;

@@ -1,0 +1,26 @@
+server:
+  port: 18084
+
+mqtt:
+  host: tcp://static-hes.calb-tech.com:18082
+  username: admin
+  password: public
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/appjiachu?serverTimezone=Asia/Shanghai
+    #useSSL=false&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+    username: root
+    password: Abc123456
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    type-handlers-package: com.example.test.mqtt
+logging:
+  path: /opt/iot/logs
+  level:
+    com:
+      example:
+        test:
+          mapper: debug
+uploadPath: /home/hesuser/upload

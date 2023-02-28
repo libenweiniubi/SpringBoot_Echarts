@@ -1,0 +1,76 @@
+# 项目相关配置
+base:
+  # 名称
+  name: DM
+  # 版本
+  version: 1.0.1
+  # 版权年份
+  copyrightYear: 2023
+#
+#  # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
+#  profile: E:/upload
+  # 获取ip地址开关
+  addressEnabled: false
+
+#thymeleaf:
+#  prefix: classpath:/templates/  #prefix：指定模板所在的目录
+#  check-template-location: true  #check-tempate-location: 检查模板路径是否存在
+#  cache: false  #cache: 是否缓存，开发模式下设置为false，避免改了模板还要重启服务器，线上设置为true，可以提高性能。
+#  suffix:  .html
+#  #encoding: UTF-8
+#  #content-type: text/html
+#  mode: HTML5
+
+logging:
+  config: classpath:logback/logback-@spring.profiles.active@.xml
+spring:
+  application:
+    name: LPD
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    # 设置视图模板为jsp
+    view:
+      prefix: /
+      suffix: .jsp
+
+  profiles:
+    active: @spring.profiles.active@
+
+  jackson:
+    #参数意义：
+    #JsonInclude.Include.ALWAYS       默认
+    #JsonInclude.Include.NON_DEFAULT   属性为默认值不序列化
+    #JsonInclude.Include.NON_EMPTY     属性为 空（””） 或者为 NULL 都不序列化
+    #JsonInclude.Include.NON_NULL      属性为NULL  不序列化
+    default-property-inclusion: ALWAYS
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      # 监控统计拦截的filters
+      filters: stat,wall,log4j,config
+      # 配置初始化大小/最小/最大
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      # 获取连接等待超时时间
+      max-wait: 60000
+      # 间隔多久进行一次检测，检测需要关闭的空闲连接
+      time-between-eviction-runs-millis: 60000
+      # 一个连接在池中最小生存的时间
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      # 打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
+      pool-prepared-statements: false
+      max-pool-prepared-statement-per-connection-size: 20
+
+
+
+

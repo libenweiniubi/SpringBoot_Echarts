@@ -1,0 +1,70 @@
+select user_id,dates
+        from userbehavior
+        group by user_id,dates;
+
+
+        -- 自关联
+
+        select * from
+        (
+        select user_id,dates
+        from userbehavior
+        group by user_id,dates
+        ) a
+        ,(
+        select user_id,dates
+        from userbehavior
+        group by user_id,dates
+        ) b
+        where a.user_id = b.user_id
+        and a.dates <= b.dates
+
+
+        -- 留存数
+        select a.dates
+        ,count(if(datediff(b.dates,a.dates)=0,b.user_id,null)) retention_0
+        ,count(if(datediff(b.dates,a.dates)=1,b.user_id,null)) retention_1
+        ,count(if(datediff(b.dates,a.dates)=3,b.user_id,null)) retention_3
+        ,count(if(datediff(b.dates,a.dates)=1,b.user_id,null))/count(if(datediff(b.dates,a.dates)=0,b.user_id,null)) retention_rate_1
+        from
+        (
+        select user_id,dates
+        from userbehavior
+        group by user_id,dates
+        ) a
+        ,(
+        select user_id,dates
+        from userbehavior
+        group by user_id,dates
+        ) b
+        where a.user_id = b.user_id
+        and a.dates <= b.dates
+        group by a.dates
+
+
+        -- 保存结果
+        create table retention_rate(
+        dates char(10),
+        retention_1 float
+        );
+
+        insert into retention_rate
+        select a.dates
+        ,count(if(datediff(b.dates,a.dates)=1,b.user_id,null))/count(if(datediff(b.dates,a.dates)=0,b.user_id,null)) retention_rate_1
+        from
+        (
+        select user_id,dates
+        from userbehavior
+        group by user_id,dates
+        ) a
+        ,(
+        select user_id,dates
+        from userbehavior
+        group by user_id,dates
+        ) b
+        where a.user_id = b.user_id
+        and a.dates <= b.dates
+        group by a.dates
+
+
+        select * from retention_rate;
